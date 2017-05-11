@@ -1,7 +1,7 @@
 [![Download](https://api.bintray.com/packages/kkorolyov/groovy/auto-snapshot/images/download.svg) ](https://bintray.com/kkorolyov/groovy/auto-snapshot/_latestVersion)
 
 # Auto SNAPSHOT
-Suffixes a project's version with `-SNAPSHOT` if the latest git tag does not match the planned version.
+Suffixes a project's version with `-SNAPSHOT` if a git tag matching the version set in the build script does not exist.
 
 ## Usage
 ```groovy

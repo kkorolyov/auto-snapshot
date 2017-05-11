@@ -4,19 +4,18 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 /**
- * Assigns the project version using "git describe" information.
+ * Suffixes the project version with '-SNAPSHOT' if a git tag matching the version set in the build script does not exist.
  */
 class AutoSnapshot implements Plugin<Project> {
 	void apply(Project project) {
-		project.version = {
+		project.gradle.projectsEvaluated {
 			def stdout = new ByteArrayOutputStream()
 			project.exec {
-				commandLine 'git', 'describe', '--always', '--match', '*[0-9]\\.[0-9]*'
+				commandLine 'git', 'tag', '-l', "$project.version"
 				standardOutput = stdout
 			}
-			def gitVersion = stdout.toString().trim().replaceFirst(/[+-].*/, '')
 
-			if (version != gitVersion) version = "$version-SNAPSHOT"	// Planned version does not have a tag
-		}()
+			if (project.version != stdout.toString().trim()) project.version = "$project.version-SNAPSHOT"	// Planned version does not have a tag
+		}
 	}
 }

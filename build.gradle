@@ -7,7 +7,7 @@ plugins {
 
 group 'dev.kkorolyov'
 version '1.0'
-description """Gradle plugin to suffix a project's version with -SNAPSHOT if the latest git tag does not match the planned version"""
+description """Gradle plugin to suffix a project's version with '-SNAPSHOT' if a git tag matching the version set in the build script does not exist"""
 
 repositories {
 	jcenter()
