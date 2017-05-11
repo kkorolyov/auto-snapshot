@@ -1,0 +1,47 @@
+plugins {
+	id 'groovy'
+	id 'java-gradle-plugin'
+	id 'maven-publish'
+	id 'com.jfrog.bintray' version '1.7.3'
+}
+
+group 'dev.kkorolyov'
+version '1.0'
+description """Gradle plugin to suffix a project's version with -SNAPSHOT if the latest git tag does not match the planned version"""
+
+repositories {
+	jcenter()
+}
+
+task sourcesJar(type: Jar) {
+	classifier = 'sources'
+	from sourceSets.main.allJava
+}
+task javadocJar(type: Jar) {
+	classifier = 'javadoc'
+	from javadoc.destinationDir
+}
+publishing {
+	publications {
+		Pub(MavenPublication) {
+			from components.java
+			artifact sourcesJar
+			artifact javadocJar
+		}
+	}
+}
+bintray {
+	user = System.getenv('BINTRAY_USER')
+	key = System.getenv('BINTRAY_KEY')
+	publications = ['Pub']
+	pkg {
+		repo = 'groovy'
+		name = project.name
+		licenses = ['BSD 3-Clause']
+		vcsUrl = 'https://github.com/kkorolyov/auto-snapshot.git'
+		version {
+			name = project.version
+		}
+	}
+}
+
